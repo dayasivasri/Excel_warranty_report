@@ -1,4 +1,5 @@
-name: Generate Asset Expiry Report
+
+name: Generate Asset Warranty Report
 
 on:
   workflow_dispatch:
@@ -20,13 +21,19 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install pandas openpyxl
+        run: pip install -r requirements.txt
 
-      - name: Run asset expiry tracker
+      - name: Check input file
+        run: |
+          ls -la
+          test -f Asset_Inventory.xlsx
+
+      - name: Generate warranty report
         run: python asset_expiry_tracker.py
 
-      - name: Upload generated report
+      - name: Upload Excel report
         uses: actions/upload-artifact@v4
         with:
-          name: Asset-Expiry-Report
-          path: "*.xlsx"
+          name: Asset-Warranty-Report
+          path: Asset_Warranty_Report.xlsx
+          if-no-files-found: error
