@@ -1,0 +1,32 @@
+name: Generate Asset Expiry Report
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pandas openpyxl
+
+      - name: Run asset expiry tracker
+        run: python asset_expiry_tracker.py
+
+      - name: Upload generated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Asset-Expiry-Report
+          path: "*.xlsx"
